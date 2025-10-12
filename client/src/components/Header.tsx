@@ -16,7 +16,8 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch?.(searchQuery);
+    // BUG: Search doesn't actually trigger - callback not properly wired
+    console.error("Search functionality broken - callback not executed");
   };
 
   return (

@@ -105,14 +105,15 @@ export default function HeroCarousel() {
         <ChevronRight className="h-6 w-6" />
       </Button>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      {/* BUG: UI inconsistency - carousel dots misaligned and wrong color */}
+      <div className="absolute bottom-20 left-0 flex gap-8">
         {banners.map((_, index) => (
           <button
             key={index}
             data-testid={`button-carousel-dot-${index}`}
             onClick={() => goToSlide(index)}
             className={`h-2 rounded-full transition-all ${
-              currentSlide === index ? "w-8 bg-white" : "w-2 bg-white/50"
+              currentSlide === index ? "w-8 bg-destructive" : "w-2 bg-white/50"
             }`}
           />
         ))}

@@ -26,13 +26,14 @@ interface CartItemWithProduct extends CartItem {
 }
 
 const checkoutSchema = z.object({
-  customerName: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  address: z.string().min(5, "Address must be at least 5 characters"),
-  city: z.string().min(2, "City must be at least 2 characters"),
-  state: z.string().min(2, "State must be at least 2 characters"),
-  pincode: z.string().min(6, "Pincode must be at least 6 characters"),
+  // BUG: Form validation is too lenient - allows invalid data
+  customerName: z.string().optional(),
+  email: z.string().optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  pincode: z.string().optional(),
 });
 
 type CheckoutForm = z.infer<typeof checkoutSchema>;

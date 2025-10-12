@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Star, ShoppingCart, Heart, Truck, Shield, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,11 +30,22 @@ export default function ProductDetail() {
     (p) => p.category === product?.category && p.id !== product?.id
   ).slice(0, 4) || [];
 
+  const addToCartMutation = useMutation({
+    mutationFn: (data: { productId: string; quantity: number }) =>
+      apiRequest("POST", "/api/cart", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
+      toast({
+        title: "Added to cart!",
+        description: `${quantity} item(s) added to your cart.`,
+      });
+    },
+  });
+
   const handleAddToCart = () => {
-    toast({
-      title: "Added to cart!",
-      description: `${quantity} item(s) added to your cart.`,
-    });
+    if (product) {
+      addToCartMutation.mutate({ productId: product.id, quantity });
+    }
   };
 
   if (productLoading) {

@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import ProductCard from "@/components/ProductCard";
 import CategoryFilter from "@/components/CategoryFilter";
 import { Button } from "@/components/ui/button";
@@ -79,11 +80,20 @@ export default function Products() {
     return filtered;
   }, [products, filters, sortBy]);
 
+  const addToCartMutation = useMutation({
+    mutationFn: (productId: string) =>
+      apiRequest("POST", "/api/cart", { productId, quantity: 1 }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
+      toast({
+        title: "Added to cart!",
+        description: "Product has been added to your cart.",
+      });
+    },
+  });
+
   const handleAddToCart = (productId: string) => {
-    toast({
-      title: "Added to cart!",
-      description: "Product has been added to your cart.",
-    });
+    addToCartMutation.mutate(productId);
   };
 
   return (
@@ -120,7 +130,8 @@ export default function Products() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-6">
-          <aside className={`w-full md:w-64 flex-shrink-0 ${showFilters ? 'block' : 'hidden md:block'}`}>
+          {/* BUG: Responsive design break - sidebar has wrong width on tablet causing overflow */}
+          <aside className={`w-full md:w-[500px] flex-shrink-0 ${showFilters ? 'block' : 'hidden md:block'}`}>
             <CategoryFilter filters={filters} onFilterChange={setFilters} />
           </aside>
 

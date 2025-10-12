@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import HeroCarousel from "@/components/HeroCarousel";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -23,11 +24,20 @@ export default function Home() {
 
   const featuredProducts = products?.slice(0, 8) || [];
 
+  const addToCartMutation = useMutation({
+    mutationFn: (productId: string) =>
+      apiRequest("POST", "/api/cart", { productId, quantity: 1 }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
+      toast({
+        title: "Added to cart!",
+        description: "Product has been added to your cart.",
+      });
+    },
+  });
+
   const handleAddToCart = (productId: string) => {
-    toast({
-      title: "Added to cart!",
-      description: "Product has been added to your cart.",
-    });
+    addToCartMutation.mutate(productId);
   };
 
   return (

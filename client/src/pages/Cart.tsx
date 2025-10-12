@@ -47,7 +47,8 @@ export default function Cart() {
   ) || 0;
 
   const deliveryFee = subtotal > 500 ? 0 : 50;
-  const total = subtotal + deliveryFee;
+  // BUG: Wrong calculation - multiplying instead of adding delivery fee
+  const total = subtotal * deliveryFee;
 
   const handleUpdateQuantity = (itemId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
