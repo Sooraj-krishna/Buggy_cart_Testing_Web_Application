@@ -1,0 +1,94 @@
+/* src/styles/Navbar.css */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #282c34; /* Dark background for the navbar */
+    padding: 1rem 2rem;
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+.navbar-brand {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #61dafb; /* A distinct color for the brand */
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+    color: #a0e9ff;
+    outline: none; /* Remove default focus outline */
+}
+
+.navbar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.8rem; /* Space between navigation items */
+}
+
+.nav-item {
+    /* No specific styles needed for li, as the anchor tag is styled */
+}
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 0.5rem 0; /* Vertical padding for better click area */
+    transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+    border-bottom: 2px solid transparent; /* For hover effect */
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: #61dafb; /* Highlight color on hover/focus */
+    border-bottom: 2px solid #61dafb;
+    outline: none; /* Remove default focus outline */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+
+    .navbar-brand {
+        margin-bottom: 1rem;
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.75rem;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    .nav-link {
+        display: block; /* Make links take full width */
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: #3a3f47; /* Slightly lighter background for mobile menu items */
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus {
+        background-color: #4a4f57;
+        color: #61dafb;
+        border-bottom: none; /* Remove border-bottom for mobile menu items */
+    }
+}
