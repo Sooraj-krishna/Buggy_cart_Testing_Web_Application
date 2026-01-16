@@ -11,6 +11,9 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
+  // Log for debugging/feature implementation tracking
+  console.log(`ProductCard rendering for product ID: ${product.id}`);
+
   // BUG: Console error - accessing undefined property (safe version)
   console.error("ProductCard Error:", product.nonExistentProperty?.value || "Property missing");
   
