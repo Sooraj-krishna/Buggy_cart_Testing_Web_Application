@@ -11,8 +11,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  // BUG: Console error - accessing undefined property (safe version)
-  console.error("ProductCard Error:", product.nonExistentProperty?.value || "Property missing");
+  // The placeholder console.error for a non-existent property has been removed.
   
   const discount = product.originalPrice
     ? Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 100)
