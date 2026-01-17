@@ -9,11 +9,12 @@ import Products from "@/pages/Products";
 import ProductDetail from "@/pages/ProductDetail";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
+import ProfilePage from "@/pages/ProfilePage"; // New import for the Profile Page
 import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
 
-function AppContent() {
+function App() {
   const { data: cartItems } = useQuery<CartItem[]>({
     queryKey: ["/api/cart"],
   });
@@ -29,6 +30,7 @@ function AppContent() {
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
+        <Route path="/profile" component={ProfilePage} /> {/* New route for the Profile Page */}
         <Route component={NotFound} />
       </Switch>
     </div>
