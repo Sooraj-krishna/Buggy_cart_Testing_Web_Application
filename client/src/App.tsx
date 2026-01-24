@@ -9,10 +9,14 @@ import Products from "@/pages/Products";
 import ProductDetail from "@/pages/ProductDetail";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
+import ContactUs from "@/pages/ContactUs"; // Import the new ContactUs page
+import ProfilePage from "@/pages/ProfilePage"; // Import the new ProfilePage
 import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
 
+// Renaming the internal component to AppContent to resolve the duplicate function definition 
+// and match the usage pattern in the exported App function below.
 function AppContent() {
   const { data: cartItems } = useQuery<CartItem[]>({
     queryKey: ["/api/cart"],
@@ -29,6 +33,8 @@ function AppContent() {
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
+        <Route path="/contact" component={ContactUs} />
+        <Route path="/profile" component={ProfilePage} /> {/* Add route for Profile Page */}
         <Route component={NotFound} />
       </Switch>
     </div>
@@ -47,3 +53,4 @@ function App() {
 }
 
 export default App;
+```
