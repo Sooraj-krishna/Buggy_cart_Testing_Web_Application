@@ -9,6 +9,8 @@ import Products from "@/pages/Products";
 import ProductDetail from "@/pages/ProductDetail";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
+import ContactUs from "./pages/ContactUsPage";
+import ProfilePage from "@/pages/ProfilePage"; // Import the new Profile Page
 import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
@@ -29,6 +31,8 @@ function AppContent() {
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
+        <Route path="/contact" component={ContactUs} />
+        <Route path="/profile" component={ProfilePage} /> {/* Add the new Profile route */}
         <Route component={NotFound} />
       </Switch>
     </div>

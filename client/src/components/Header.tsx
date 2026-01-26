@@ -4,6 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -18,6 +26,11 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
     e.preventDefault();
     // BUG: Search doesn't actually trigger - callback not properly wired
     console.error("Search functionality broken - callback not executed");
+  };
+
+  // Helper function to close mobile menu on navigation
+  const handleMobileNavigation = () => {
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -64,14 +77,39 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
           </form>
 
           <div className="flex items-center gap-2">
-            <Button
-              data-testid="button-account"
-              variant="ghost"
-              className="text-primary-foreground hover-elevate hidden md:flex"
-            >
-              <User className="h-5 w-5 mr-2" />
-              <span>Account</span>
-            </Button>
+            {/* Desktop Account Dropdown Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  data-testid="button-account"
+                  variant="ghost"
+                  className="text-primary-foreground hover-elevate hidden md:flex"
+                >
+                  <User className="h-5 w-5 mr-2" />
+                  <span>Account</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <Link href="/profile">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
+                {/* Ensure Orders navigation uses Link */}
+                <Link href="/orders">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Orders
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {/* End Desktop Account Dropdown Menu */}
 
             <Link href="/cart" data-testid="link-cart">
               <Button variant="ghost" className="text-primary-foreground hover-elevate relative">
@@ -118,13 +156,32 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-primary-border bg-primary">
           <nav className="p-4 space-y-2">
+            {/* Mobile Navigation Links */}
+            <Link href="/profile" onClick={handleMobileNavigation}>
+              <Button
+                data-testid="button-mobile-profile"
+                variant="ghost"
+                className="w-full justify-start text-primary-foreground hover-elevate"
+              >
+                <User className="h-5 w-5 mr-2" />
+                Profile
+              </Button>
+            </Link>
+            <Link href="/orders" onClick={handleMobileNavigation}>
+              <Button
+                data-testid="button-mobile-orders"
+                variant="ghost"
+                className="w-full justify-start text-primary-foreground hover-elevate"
+              >
+                Orders
+              </Button>
+            </Link>
             <Button
-              data-testid="button-mobile-account"
+              data-testid="button-mobile-logout"
               variant="ghost"
-              className="w-full justify-start text-primary-foreground hover-elevate"
+              className="w-full justify-start text-destructive hover:bg-destructive/10"
             >
-              <User className="h-5 w-5 mr-2" />
-              Account
+              Logout
             </Button>
           </nav>
         </div>
