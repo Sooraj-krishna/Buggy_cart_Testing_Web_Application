@@ -1,9 +1,16 @@
 import { Link } from "wouter";
 import { Search, ShoppingCart, User, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
 import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -64,14 +71,33 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
           </form>
 
           <div className="flex items-center gap-2">
-            <Button
-              data-testid="button-account"
-              variant="ghost"
-              className="text-primary-foreground hover-elevate hidden md:flex"
-            >
-              <User className="h-5 w-5 mr-2" />
-              <span>Account</span>
-            </Button>
+            {/* Desktop Account Dropdown Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  data-testid="button-account"
+                  variant="ghost"
+                  className="text-primary-foreground hover-elevate hidden md:flex"
+                >
+                  <User className="h-5 w-5 mr-2" />
+                  <span>Account</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <Link href="/profile">
+                  <DropdownMenuItem data-testid="dropdown-profile">
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  Orders
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             <Link href="/cart" data-testid="link-cart">
               <Button variant="ghost" className="text-primary-foreground hover-elevate relative">
@@ -118,14 +144,17 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-primary-border bg-primary">
           <nav className="p-4 space-y-2">
-            <Button
-              data-testid="button-mobile-account"
-              variant="ghost"
-              className="w-full justify-start text-primary-foreground hover-elevate"
-            >
-              <User className="h-5 w-5 mr-2" />
-              Account
-            </Button>
+            <Link href="/profile">
+              <Button
+                data-testid="button-mobile-account"
+                variant="ghost"
+                className="w-full justify-start text-primary-foreground hover-elevate"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <User className="h-5 w-5 mr-2" />
+                Account
+              </Button>
+            </Link>
           </nav>
         </div>
       )}
