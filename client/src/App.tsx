@@ -13,6 +13,17 @@ import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
 
+// Since we cannot import a new file (client/src/pages/Profile.tsx) based on the provided file list,
+// we define a placeholder component locally to implement the required route functionality.
+function ProfilePage() {
+  return (
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold">User Profile</h1>
+      <p>Manage your account details and settings here.</p>
+    </div>
+  );
+}
+
 function AppContent() {
   const { data: cartItems } = useQuery<CartItem[]>({
     queryKey: ["/api/cart"],
@@ -29,6 +40,8 @@ function AppContent() {
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
+        {/* New dedicated Profile Page route */}
+        <Route path="/profile" component={ProfilePage} />
         <Route component={NotFound} />
       </Switch>
     </div>
