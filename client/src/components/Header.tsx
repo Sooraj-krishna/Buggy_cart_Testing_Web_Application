@@ -1,9 +1,16 @@
 import { Link } from "wouter";
-import { Search, ShoppingCart, User, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { Search, ShoppingCart, User, Menu, Home, Package } from "lucide-react";
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
 import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -16,9 +23,39 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // BUG: Search doesn't actually trigger - callback not properly wired
-    console.error("Search functionality broken - callback not executed");
+    if (onSearch) {
+      onSearch(searchQuery);
+    } else {
+      // If onSearch is not provided, we can still log or handle navigation
+      console.log("Searching for:", searchQuery);
+    }
+    // Optionally clear search query after submission
+    // setSearchQuery("");
   };
+
+  const NavLink = ({ href, children, onClick }: { href: string, children: React.ReactNode, onClick?: () => void }) => (
+    <Link href={href}>
+      <Button
+        variant="ghost"
+        className="text-primary-foreground hover-elevate"
+        onClick={onClick}
+      >
+        {children}
+      </Button>
+    </Link>
+  );
+
+  const MobileNavLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
+    <Link href={href}>
+      <Button
+        variant="ghost"
+        className="w-full justify-start text-primary-foreground hover-elevate"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        {children}
+      </Button>
+    </Link>
+  );
 
   return (
     <header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-md">
@@ -40,6 +77,19 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
               <span className="text-xl font-bold">ShopKart</span>
             </div>
           </Link>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex ml-8 space-x-2">
+            <NavLink href="/">
+              <Home className="h-5 w-5 mr-2" />
+              Home
+            </NavLink>
+            <NavLink href="/products">
+              <Package className="h-5 w-5 mr-2" />
+              Products
+            </NavLink>
+          </nav>
+
 
           <form onSubmit={handleSearch} className="flex-1 max-w-2xl mx-auto hidden md:flex">
             <div className="relative w-full">
@@ -64,14 +114,33 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
           </form>
 
           <div className="flex items-center gap-2">
-            <Button
-              data-testid="button-account"
-              variant="ghost"
-              className="text-primary-foreground hover-elevate hidden md:flex"
-            >
-              <User className="h-5 w-5 mr-2" />
-              <span>Account</span>
-            </Button>
+            {/* Desktop Account Dropdown Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  data-testid="button-account"
+                  variant="ghost"
+                  className="text-primary-foreground hover-elevate hidden md:flex"
+                >
+                  <User className="h-5 w-5 mr-2" />
+                  <span>Account</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <Link href="/profile">
+                  <DropdownMenuItem data-testid="dropdown-profile">
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  Orders
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             <Link href="/cart" data-testid="link-cart">
               <Button variant="ghost" className="text-primary-foreground hover-elevate relative">
@@ -118,14 +187,18 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-primary-border bg-primary">
           <nav className="p-4 space-y-2">
-            <Button
-              data-testid="button-mobile-account"
-              variant="ghost"
-              className="w-full justify-start text-primary-foreground hover-elevate"
-            >
+            <MobileNavLink href="/">
+              <Home className="h-5 w-5 mr-2" />
+              Home
+            </MobileNavLink>
+            <MobileNavLink href="/products">
+              <Package className="h-5 w-5 mr-2" />
+              Products
+            </MobileNavLink>
+            <MobileNavLink href="/profile">
               <User className="h-5 w-5 mr-2" />
               Account
-            </Button>
+            </MobileNavLink>
           </nav>
         </div>
       )}
