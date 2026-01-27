@@ -64,14 +64,17 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
           </form>
 
           <div className="flex items-center gap-2">
-            <Button
-              data-testid="button-account"
-              variant="ghost"
-              className="text-primary-foreground hover-elevate hidden md:flex"
-            >
-              <User className="h-5 w-5 mr-2" />
-              <span>Account</span>
-            </Button>
+            {/* Account button now links to /profile */}
+            <Link href="/profile" data-testid="link-account">
+              <Button
+                data-testid="button-account"
+                variant="ghost"
+                className="text-primary-foreground hover-elevate hidden md:flex"
+              >
+                <User className="h-5 w-5 mr-2" />
+                <span>Account</span>
+              </Button>
+            </Link>
 
             <Link href="/cart" data-testid="link-cart">
               <Button variant="ghost" className="text-primary-foreground hover-elevate relative">
@@ -118,14 +121,18 @@ export default function Header({ cartItemCount = 0, onSearch }: HeaderProps) {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-primary-border bg-primary">
           <nav className="p-4 space-y-2">
-            <Button
-              data-testid="button-mobile-account"
-              variant="ghost"
-              className="w-full justify-start text-primary-foreground hover-elevate"
-            >
-              <User className="h-5 w-5 mr-2" />
-              Account
-            </Button>
+            {/* Mobile Account button now links to /profile */}
+            <Link href="/profile" data-testid="link-mobile-account">
+              <Button
+                data-testid="button-mobile-account"
+                variant="ghost"
+                className="w-full justify-start text-primary-foreground hover-elevate"
+                onClick={() => setMobileMenuOpen(false)} // Close menu on navigation
+              >
+                <User className="h-5 w-5 mr-2" />
+                Account
+              </Button>
+            </Link>
           </nav>
         </div>
       )}

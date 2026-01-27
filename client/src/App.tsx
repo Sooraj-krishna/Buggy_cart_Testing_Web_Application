@@ -10,6 +10,8 @@ import ProductDetail from "@/pages/ProductDetail";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
 import NotFound from "@/pages/not-found";
+import About from "./pages/AboutPage";
+import Profile from "./pages/ProfilePage"; // Import the new Profile page
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
 
@@ -25,10 +27,12 @@ function AppContent() {
       <Header cartItemCount={cartItemCount} />
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/about" component={About} />
         <Route path="/products" component={Products} />
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
+        <Route path="/profile" component={Profile} /> {/* Add route for the Profile page */}
         <Route component={NotFound} />
       </Switch>
     </div>
