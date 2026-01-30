@@ -7,7 +7,8 @@ import Header from "@/components/Header";
 import Home from "@/pages/Home";
 import Products from "@/pages/Products";
 import ProductDetail from "@/pages/ProductDetail";
-import Cart from "@/pages/Cart";
+import CartPage from "@/pages/CartPage.tsx"; // New Cart Page
+import APage from "@/pages/APage.tsx"; // New APage
 import Checkout from "@/pages/Checkout";
 import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
@@ -27,7 +28,8 @@ function AppContent() {
         <Route path="/" component={Home} />
         <Route path="/products" component={Products} />
         <Route path="/product/:id" component={ProductDetail} />
-        <Route path="/cart" component={Cart} />
+        <Route path="/a-page" component={APage} /> {/* Route for APage */}
+        <Route path="/cart" component={CartPage} /> {/* Use the new CartPage */}
         <Route path="/checkout" component={Checkout} />
         <Route component={NotFound} />
       </Switch>
