@@ -10,6 +10,7 @@ import ProductDetail from "@/pages/ProductDetail";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
 import NotFound from "@/pages/not-found";
+import APage from "@/pages/APage.tsx"; // Import the new APage
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
 
@@ -29,6 +30,7 @@ function AppContent() {
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
+        <Route path="/a" component={APage} /> {/* Add the new route for APage */}
         <Route component={NotFound} />
       </Switch>
     </div>
