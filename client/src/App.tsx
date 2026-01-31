@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/Header";
 import Home from "@/pages/Home";
-import Products from "@/pages/Products";
+import ProductsPage from "@/pages/ProductsPage"; // Changed from Products to ProductsPage
 import ProductDetail from "@/pages/ProductDetail";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
@@ -25,7 +25,7 @@ function AppContent() {
       <Header cartItemCount={cartItemCount} />
       <Switch>
         <Route path="/" component={Home} />
-        <Route path="/products" component={Products} />
+        <Route path="/products" component={ProductsPage} /> {/* Changed from Products to ProductsPage */}
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
