@@ -1,9 +1,10 @@
 import { Link } from "wouter";
 import { Star, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import { Card } from "@/components/ui/card.tsx";
 import type { Product } from "@shared/schema";
+import { useWishlist } from "@/context/WishlistContext.tsx"; // Import the wishlist context hook
 
 interface ProductCardProps {
   product: Product;
@@ -11,12 +12,25 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  // BUG: Console error - accessing undefined property (safe version)
-  console.error("ProductCard Error:", product.nonExistentProperty?.value || "Property missing");
+  // The previous console.error line was a debugging artifact and has been removed.
   
   const discount = product.originalPrice
     ? Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 100)
     : 0;
+
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const isProductInWishlist = isInWishlist(product.id);
+
+  const handleToggleWishlist = (event: React.MouseEvent) => {
+    event.preventDefault(); // Prevent navigation if the button is inside a link
+    event.stopPropagation(); // Stop event propagation to parent elements
+
+    if (isProductInWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
 
   return (
     <Card
@@ -59,9 +73,12 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         data-testid={`button-wishlist-${product.id}`}
         size="icon"
         variant="ghost"
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-white hover-elevate"
+        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-white hover-elevate z-10" // Added z-10 to ensure button is clickable
+        onClick={handleToggleWishlist}
       >
-        <Heart className="h-4 w-4" />
+        <Heart 
+          className={`h-4 w-4 ${isProductInWishlist ? "fill-red-500 text-red-500" : "text-gray-500"}`} 
+        />
       </Button>
 
       <div className="p-4 space-y-2">
