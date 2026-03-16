@@ -1,22 +1,64 @@
 import { Link } from "wouter";
 import { Star, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import type { Product } from "@shared/schema";
+import { Button } from "@/components/ui/button.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import { Card } from "@/components/ui/card.tsx";
+import type { Product } from "@shared/schema.ts";
+import { useToast } from "@/hooks/use-toast.ts";
+import { useCart } from "@/context/CartContext.tsx"; // Being created
+import { useWishlist } from "@/context/WishlistContext.tsx"; // Being created
+import { useCallback } from "react";
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart?: (productId: string) => void;
+  // onAddToCart?: (productId: string) => void; // Removed as context will handle this
 }
 
-export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  // BUG: Console error - accessing undefined property (safe version)
-  console.error("ProductCard Error:", product.nonExistentProperty?.value || "Property missing");
-  
+export default function ProductCard({ product }: ProductCardProps) {
+  // Removed the BUG console.error as it's not part of the feature implementation
+  // console.error("ProductCard Error:", product.nonExistentProperty?.value || "Property missing");
+
+  const { toast } = useToast();
+  const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+
+  const handleAddToCart = useCallback(() => {
+    if (product.inStock) {
+      addToCart(product);
+      toast({
+        title: "Added to Cart",
+        description: `${product.name} has been added to your cart.`,
+      });
+    } else {
+      toast({
+        title: "Out of Stock",
+        description: `${product.name} is currently out of stock.`,
+        variant: "destructive",
+      });
+    }
+  }, [addToCart, product, toast]);
+
+  const handleToggleWishlist = useCallback(() => {
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+      toast({
+        title: "Removed from Wishlist",
+        description: `${product.name} has been removed from your wishlist.`,
+      });
+    } else {
+      addToWishlist(product);
+      toast({
+        title: "Added to Wishlist",
+        description: `${product.name} has been added to your wishlist.`,
+      });
+    }
+  }, [addToWishlist, removeFromWishlist, isInWishlist, product, toast]);
+
   const discount = product.originalPrice
     ? Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 100)
     : 0;
+
+  const isProductInWishlist = isInWishlist(product.id);
 
   return (
     <Card
@@ -59,9 +101,12 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         data-testid={`button-wishlist-${product.id}`}
         size="icon"
         variant="ghost"
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-white hover-elevate"
+        className={`absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-white hover-elevate ${
+          isProductInWishlist ? "text-red-500" : "text-gray-500"
+        }`}
+        onClick={handleToggleWishlist}
       >
-        <Heart className="h-4 w-4" />
+        <Heart className={`h-4 w-4 ${isProductInWishlist ? "fill-red-500" : ""}`} />
       </Button>
 
       <div className="p-4 space-y-2">
@@ -117,7 +162,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
         <Button
           data-testid={`button-add-to-cart-${product.id}`}
-          onClick={() => onAddToCart?.(product.id)}
+          onClick={handleAddToCart}
           className="w-full"
           disabled={!product.inStock}
         >

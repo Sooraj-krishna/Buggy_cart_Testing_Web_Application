@@ -1,24 +1,26 @@
 import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
+import { queryClient } from "./lib/queryClient.ts";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import Header from "@/components/Header";
-import Home from "@/pages/Home";
-import Products from "@/pages/Products";
-import ProductDetail from "@/pages/ProductDetail";
-import Cart from "@/pages/Cart";
-import Checkout from "@/pages/Checkout";
-import NotFound from "@/pages/not-found";
-import { useQuery } from "@tanstack/react-query";
-import type { CartItem } from "@shared/schema";
+import { Toaster } from "@/components/ui/toaster.tsx";
+import { TooltipProvider } from "@/components/ui/tooltip.tsx";
+import Header from "@/components/Header.tsx";
+import Home from "@/pages/Home.tsx";
+import Products from "@/pages/Products.tsx";
+import ProductDetail from "@/pages/ProductDetail.tsx";
+import Cart from "@/pages/Cart.tsx";
+import Checkout from "@/pages/Checkout.tsx";
+import NotFound from "@/pages/not-found.tsx";
+
+// New imports for Context Providers and Product Listing Page
+import { CartProvider, useCart } from "@/context/CartContext.tsx";
+import { WishlistProvider } from "@/context/WishlistContext.tsx";
+import ProductListingPage from "@/pages/ProductListingPage.tsx";
 
 function AppContent() {
-  const { data: cartItems } = useQuery<CartItem[]>({
-    queryKey: ["/api/cart"],
-  });
-
-  const cartItemCount = cartItems?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+  // The cart state is now managed by CartContext.
+  // We remove the direct useQuery for cart items and instead consume from the context.
+  const { cartItems } = useCart();
+  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -26,6 +28,8 @@ function AppContent() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/products" component={Products} />
+        {/* New route for the ProductListingPage */}
+        <Route path="/products-listing" component={ProductListingPage} />
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
@@ -39,8 +43,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <AppContent />
-        <Toaster />
+        {/* Wrap the AppContent with CartProvider and WishlistProvider */}
+        {/* This makes cart and wishlist state available to all components within AppContent */}
+        <CartProvider>
+          <WishlistProvider>
+            <AppContent />
+            <Toaster />
+          </WishlistProvider>
+        </CartProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
