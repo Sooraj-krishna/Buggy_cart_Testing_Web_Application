@@ -6,12 +6,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/Header";
 import Home from "@/pages/Home";
 import Products from "@/pages/Products";
-import ProductDetail from "@/pages/ProductDetail";
+import ProductDetail from "./pages/ProductDetailPage";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
 import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
+import WishlistProvider from "@/context/WishlistContext.tsx"; // New import
+import WishlistSheet from "@/components/WishlistSheet.tsx"; // New import
 
 function AppContent() {
   const { data: cartItems } = useQuery<CartItem[]>({
@@ -23,6 +25,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-background">
       <Header cartItemCount={cartItemCount} />
+      <WishlistSheet /> {/* New component */}
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/products" component={Products} />
@@ -39,7 +42,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <AppContent />
+        <WishlistProvider> {/* New provider */}
+          <AppContent />
+        </WishlistProvider>
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
