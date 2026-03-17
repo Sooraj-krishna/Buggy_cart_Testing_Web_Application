@@ -12,6 +12,7 @@ import Checkout from "@/pages/Checkout";
 import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
+import Products from './pages/Products';
 
 function AppContent() {
   const { data: cartItems } = useQuery<CartItem[]>({
@@ -47,3 +48,7 @@ function App() {
 }
 
 export default App;
+
+
+// TODO: Add these routes to your routing configuration:
+//   <Route path="/products" element={<Products />} />
