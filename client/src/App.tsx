@@ -5,13 +5,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/Header";
 import Home from "@/pages/Home";
-import Products from "@/pages/Products";
+import Products from "./pages/ProductsPage";
 import ProductDetail from "@/pages/ProductDetail";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
 import NotFound from "@/pages/not-found";
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "@shared/schema";
+import ProductsPage from './pages/ProductsPage';
 
 function AppContent() {
   const { data: cartItems } = useQuery<CartItem[]>({
@@ -47,3 +48,7 @@ function App() {
 }
 
 export default App;
+
+
+// TODO: Add these routes to your routing configuration:
+//   <Route path="/products" element={<ProductsPage />} />

@@ -1,8 +1,8 @@
 import { Link } from "wouter";
 import { Star, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import { Card } from "@/components/ui/card.tsx";
 import type { Product } from "@shared/schema";
 
 interface ProductCardProps {
@@ -11,8 +11,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  // BUG: Console error - accessing undefined property (safe version)
-  console.error("ProductCard Error:", product.nonExistentProperty?.value || "Property missing");
+  // The console.error line was a debug placeholder and is removed to clean up the component.
   
   const discount = product.originalPrice
     ? Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 100)
